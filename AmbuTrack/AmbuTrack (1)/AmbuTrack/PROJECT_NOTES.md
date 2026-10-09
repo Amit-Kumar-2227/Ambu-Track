@@ -17,7 +17,6 @@ Build an easy-to-understand web application that applies A* to minimize estimate
 5. **Fleet:** changes demo availability and prevents assignment of offline/on-trip units.
 6. **Hospital finder:** filters fictional hospitals and sorts them by route time.
 7. **History:** records completed/cancelled trips and exports CSV.
-8. **Firebase backend:** anonymous per-user authentication, Firestore state, transactional saves, revision conflict detection and resumable trip checkpoints. Missing configuration uses clearly labelled local demo storage.
 
 ## Algorithm steps
 
@@ -68,8 +67,4 @@ This implementation scans a Set to find the next node. With the consistent heuri
 
 ## Future extensions
 
-Replace the illustrative graph with a validated street graph; extend the included Firebase backend with permanent sign-in and dispatcher roles; integrate consented driver GPS; support simultaneous trips; match units to requested capabilities; support operationally validated traffic and hospital availability. These are future work, not current features.
-
-## Current Firebase status
-
-Integration code is included; no Firebase project is connected yet. See FIREBASE_SETUP.md. Cloud data uses anonymous per-browser workspaces, not a shared operations dashboard. The rules have not been verified against a live project or emulator.
+Replace the illustrative graph with a validated street graph; add a server and database; integrate consented driver GPS; implement authentication and roles; support simultaneous trips; match units to requested capabilities; support operationally validated traffic and hospital availability. These are future work, not current features.

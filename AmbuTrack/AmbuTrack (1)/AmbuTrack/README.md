@@ -1,6 +1,6 @@
 # AmbuTrack
 
-A student-friendly ambulance dispatch and tracking web project with a real **A* (A-star) pathfinding implementation**. Written in HTML, CSS and JavaScript. The frontend runs without a framework. A Firebase backend is included for cloud persistence; it needs your Firebase web configuration, Anonymous Authentication and Firestore. Until configured, it uses explicitly labelled local demo storage. See **FIREBASE_SETUP.md**.
+A student-friendly ambulance dispatch and tracking web project with a real **A* (A-star) pathfinding implementation**. Written in HTML, CSS and JavaScript. No framework, API key, database setup or paid service is required.
 
 ## Run on Windows
 
@@ -24,16 +24,14 @@ On macOS/Linux run `python3 serve.py`. This server binds only to your own comput
 - Accelerated vehicle movement at 30× speed, pause/resume and cancellation.
 - Hospital speciality filter and ranking by A* travel time.
 - A* search trace with g, h and f values.
-- Firebase Cloud Firestore persistence for fleet, hospitals, active-trip checkpoints, settings and the latest 100 trip records.
-- Anonymous Authentication and per-user Firestore security rules.
-- Explicit local-demo fallback before Firebase is configured, plus CSV export.
+- Trip history in browser localStorage (latest 100 trips), with CSV export.
 - Responsive layouts, labelled form controls and keyboard-accessible dialogs.
 
 ## Scope and limitations
 
-This is a **working educational simulation**, not an emergency service. The Bhopal-inspired map is a fictional, hand-built road graph, not a geographically accurate street map. Hospitals, bed counts, crews, traffic, travel times and positions are demo data. The project does not contact ambulances or hospitals and has no real GPS or emergency-service backend. Its optional Firebase database stores isolated demo workspaces. Priority is a recorded label, not a medical triage system. Fleet type is descriptive and automatic assignment does not assess clinical suitability.
+This is a **working educational simulation**, not an emergency service. The Bhopal-inspired map is a fictional, hand-built road graph, not a geographically accurate street map. Hospitals, bed counts, crews, traffic, travel times and positions are demo data. The project does not contact ambulances or hospitals and has no real GPS, authentication, backend API or shared database. Priority is a recorded label, not a medical triage system. Fleet type is descriptive and automatic assignment does not assess clinical suitability.
 
-Fleet, history, settings and active-trip checkpoints persist in Firestore when configured, or localStorage in local mode. Reloaded trips start paused. Anonymous Firebase workspaces are scoped to the current browser identity, so different identities do not share records. Moving trips checkpoint every five seconds. Cancelling snaps the ambulance to its last reached network node. Historical distance/time fields describe the full planned route, not actual travel after cancellation. Only one simulated trip runs at a time. Background-tab throttling may slow the visual simulation.
+An active trip and fleet changes stay in memory and reset on reload. Only finished/cancelled trip history persists in this browser. Different browsers do not share records. Cancelling snaps the ambulance to its last reached network node. Historical distance/time fields describe the full planned route, not actual travel after cancellation. Only one simulated trip runs at a time. Background-tab throttling may slow the visual simulation.
 
 Google Fonts is an optional visual dependency; system fonts are used when unavailable. The map, routing and tracking do not depend on external map APIs.
 
@@ -43,13 +41,7 @@ Google Fonts is an optional visual dependency; system fonts are used when unavai
 |---|---|
 | `dist/index.html` | Dashboard, fleet, hospitals, history, A* explorer and about views |
 | `dist/styles.css` | Responsive styling |
-| `dist/app.js` | UI, assignment, tracking simulation, persistence integration and export |
-| `dist/backend.js` | Firebase Auth/Firestore adapter, local adapter and serialized save queue |
-| `dist/state.js` | Data validation and active-trip checkpoint encoding/restoration |
-| `dist/firebase-config.js` | Fill in your public Firebase web config here |
-| `firestore.rules` | Owner-only database rules with revision checks |
-| `firebase.json` | Firebase rules/hosting configuration |
-| `FIREBASE_SETUP.md` | Backend connection and verification instructions |
+| `dist/app.js` | UI, assignment, tracking simulation, local history and export |
 | `dist/routing.js` | A* search, cost function and nearest-unit selection |
 | `dist/data.js` | Graph, demo hospitals, pickup locations and fleet |
 | `tests/routing.test.js` | Algorithm correctness tests |
@@ -78,9 +70,7 @@ Install Node.js, then run:
 npm test
 ```
 
-The backend tests cover seeding, preserving existing data, stale-writer rejection, serialized writes, retry, and checkpoint restoration using an injected SDK mock. Live Firebase and security-rule enforcement have not yet been tested without your project configuration.
-
-The routing test suite compares A* with Dijkstra (`h = 0`) across 528 source/destination/scenario combinations. It also verifies edge continuity, closed-road avoidance, no-path cases, same-node paths and unavailable-fleet handling.
+The test suite compares A* with Dijkstra (`h = 0`) across 528 source/destination/scenario combinations. It also verifies edge continuity, closed-road avoidance, no-path cases, same-node paths and unavailable-fleet handling.
 
 Browser visual QA was unavailable in the build environment; the automated checks cover the routing logic, and JavaScript syntax.
 
